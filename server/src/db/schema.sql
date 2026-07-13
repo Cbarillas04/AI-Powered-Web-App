@@ -1,0 +1,8 @@
+CREATE DATABASE AI_Web_App;
+
+CREATE TABLE Documents (
+	id INT PRIMARY KEY,
+    title VARCHAR(255),
+    src_path VARCHAR(512),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
