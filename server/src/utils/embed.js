@@ -6,7 +6,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Used for single text strings, returns a single embedding
+// Single text strings, returns a single embedding
 export async function embedText(text) {
     const response = await openai.embeddings.create({
         model: "text-embedding-3-small",
@@ -15,7 +15,7 @@ export async function embedText(text) {
     return response.data[0].embedding;
 }
 
-// Used on larger batches of texts(docs), returns an array of embeddings
+// Larger batches of texts(docs), returns an array of embeddings
 export async function embedBatch(texts) {
     const response = await openai.embeddings.create({
         model: "text-embedding-3-small",
