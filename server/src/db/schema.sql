@@ -4,7 +4,8 @@ CREATE TABLE Documents (
 	id INT auto_increment PRIMARY KEY,
     title VARCHAR(255),
     src_path VARCHAR(512),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    doc_date DATE NULL
 );
 
 CREATE TABLE Chunks (

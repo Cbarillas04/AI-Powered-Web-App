@@ -1,1 +1,2 @@
 # AI-Powered-Web-App
+# Feed docs through chunking + embedding, which does with OpenAi, and store them in MySQL. When a user asks a question, we embed that question (OpenAI), compare it against all stored chunk embeddings, using cosine similarity, and pull the top k (5 in this case) most relevant chunks. Then we send those chunks + the original question to Anthropic, instructing it to answer using only that context. This grounds the answer in your actual notes instead of Claude's general training knowledge.
