@@ -1,7 +1,6 @@
 
 
-Procedural Dungeon Generator (Roblox /
-## Lua)
+Procedural Dungeon Generator (Roblox/Lua)
 ## Overview
 This project is a procedural dungeon generation system built in Roblox using Lua. The goal
 was to generate playable, non-repetitive dungeon layouts at runtime instead of having a
