@@ -1,8 +1,8 @@
 import readline from "readline";
-import {embedText} from "../src/utils/embed.js";
-import {generateAnswer} from "../src/utils/generate.js";
-import {findSimilarity} from "../src/utils/similarity.js";
-import {pool} from "../src/db/pool.js";
+import { embedText } from "../src/utils/embed.js";
+import { generateAnswer } from "../src/utils/generate.js";
+import { findSimilarity } from "../src/utils/similarity.js";
+import { pool } from "../src/db/pool.js";
 
 const rl = readline.createInterface({
   input: process.stdin,
