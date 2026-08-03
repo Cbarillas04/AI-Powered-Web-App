@@ -31,13 +31,13 @@ router.post('/create', async (req, res, next) => {
 });
 
 
-// Edit an existing document by Id
+// Update a document by Id
 router.put('/:id', async (req, res, next) => {
     const chunks = chunkText(req.body.content);
     const embeddings = await embedBatch(chunks);
     const {title, content, src_path, doc_date} = req.body;
     const connection = await pool.getConnection();
-
+    // If any part of the update fails, rolls back the entire transaction
     try {
         await connection.beginTransaction();
 
@@ -45,6 +45,7 @@ router.put('/:id', async (req, res, next) => {
         await connection.query(`
             UPDATE Documents SET title = ?, src_path = ?, doc_date = ? WHERE id = ?`, 
             [title, src_path, doc_date, req.params.id]);
+        // Only insert the new chunks and embeddings (since document already exists)
         await ingestChunks(chunks, embeddings, req.params.id, connection);
         
         await connection.commit();

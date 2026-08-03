@@ -23,7 +23,7 @@ async function main() {
                 "SELECT id, content, embedding FROM Chunks"
         );
         // Only consider top 5 chunks with similarity at least 0.3
-        const similarity = findSimilarity(queryEmbedding, rows, 5)
+        const similarity = findSimilarity(queryEmbedding, rows)
             .filter(chunk => chunk.similarity >= 0.3).slice(0, 5);
         //console.log("Similarity:", similarity);
 

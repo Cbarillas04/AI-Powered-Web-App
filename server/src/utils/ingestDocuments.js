@@ -2,7 +2,7 @@ import { pool } from "../db/pool.js";
 import { chunkText } from "./chunk.js";
 import { embedBatch } from "./embed.js";
 
-
+// Ingests a document into the database, including its chunks and embeddings
 export async function ingestDocuments(title, content, src_path, doc_date) {
     const chunks = chunkText(content);
     const embeddings = await embedBatch(chunks);
@@ -15,6 +15,7 @@ export async function ingestDocuments(title, content, src_path, doc_date) {
     return { documentId: docId, title, chunksCount: chunks.length };
 }
 
+// Ingests chunks into the database based on doc ID
 export async function ingestChunks(chunks, embeddings, docId, connection = pool) {
     for (let i = 0; i < chunks.length; i++) {
             await connection.query(
