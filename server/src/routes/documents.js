@@ -10,9 +10,16 @@ const router = express.Router();
 
 // Get all documents from the database
 router.get('/', async (req, res, next) => {
-    try{
-        const [rows] = await pool.query('SELECT * FROM Documents');
-        res.json(rows);
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
+        
+        const [rows] = await pool.query('SELECT * FROM Documents ORDER BY id LIMIT ? OFFSET ?', [limit, offset]);
+        const [secondRows] = await pool.query('SELECT COUNT(*) AS total FROM Documents');
+        const totalCount = secondRows[0].total;
+        
+        res.json({ documents: rows, total: totalCount, page, limit });
     } catch (err) {
         next(err);
     }

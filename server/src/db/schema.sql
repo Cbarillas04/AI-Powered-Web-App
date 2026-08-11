@@ -15,6 +15,5 @@ CREATE TABLE Chunks (
     content TEXT,
     embedding JSON,
     created_at TIMESTAMP,
-    FOREIGN KEY (doc_id) REFERENCES Documents(id)
-    ON DELETE CASCADE
+    FOREIGN KEY (doc_id) REFERENCES Documents(id) ON DELETE CASCADE
 );
