@@ -24,6 +24,7 @@
 .addDocumentContainer {
     display: flex;
     flex-direction: column;
+    height: 150px;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
