@@ -1,12 +1,15 @@
 import express from 'express';
+import multer from 'multer'
 import { pool } from '../db/pool.js';
 import { ingestDocuments } from '../utils/ingestDocuments.js';
 import { ingestChunks } from '../utils/ingestDocuments.js';
 import { chunkText } from '../utils/chunk.js';
 import { embedBatch } from '../utils/embed.js';
+import { extractText } from '../utils/extractText.js';
 
 
 const router = express.Router();
+const upload = multer({storage: multer.memoryStorage()});
 
 // Get all documents from the database
 router.get('/', async (req, res, next) => {
@@ -26,12 +29,14 @@ router.get('/', async (req, res, next) => {
 });
 
 // Add a new document
-router.post('/create', async (req, res, next) => {
+router.post('/create', upload.single('file'), async (req, res, next) => {
     try{
-        const {title, content, src_path, doc_date} = req.body;
-        const result = await ingestDocuments(title, content, src_path, doc_date);
+        //console.log(req.file);
+        //console.log(req.body);
+        const content = await extractText(req.file);
+        const {title, doc_date} = req.body;
+        const result = await ingestDocuments(title, content, req.file.originalname, doc_date);
         res.json({ message: 'Document created successfully', documentId: result.documentId });
-
     } catch (err) {
         next(err);
     }

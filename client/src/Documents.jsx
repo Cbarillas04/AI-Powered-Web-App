@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./Documents.css";
 
-const DocumentsView = () => {
+const DocumentsView = ({refreshTrigger}) => {
     const [documents, setDocuments] = useState([]);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
@@ -25,7 +25,7 @@ const DocumentsView = () => {
         };
 
         fetchDocuments();
-    }, [page]);
+    }, [page, refreshTrigger]);
 
     async function deleteDocument(id) {
         try {
@@ -47,11 +47,16 @@ const DocumentsView = () => {
 
     return (
         <div className="documentsContainer">
-            <h2> Uploaded Documents: </h2>
+            <h2> Current Documents: </h2>
             {loading && <p>Loading documents...</p>}
             {error && <p className="error">{error}</p>}
-            <p> {totalCount} document{totalCount !== 1 ? "s" : ""} </p>
-            <ul>
+            <p className="docCount"> 
+                <span className="docCountNumber">
+                    {totalCount}
+                </span> {" "}
+                document{totalCount !== 1 ? "s" : ""} uploaded 
+            </p>
+            <ul className="documentsList">
                 {(documents || []).map((doc) => (
                     <li key={doc.id}>
                         <strong> ID: {doc.id} </strong>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import "./Documents.css";
 
-const AddDocument = () => {
+const AddDocument = ({onDocumentAdded}) => {
     const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const [file, setFile] = useState(null);
     const [docDate, setDocDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -11,19 +11,21 @@ const AddDocument = () => {
      async function handleAddDocument() {
         setLoading(true);
         try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("title", title);
+            formData.append("doc_date", docDate);
             const response = await fetch('http://localhost:5000/api/documents/create', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title, content, src_path:"web-upload", doc_date: docDate })
+                body: formData
             });
             const data = await response.json();
             if (response.ok) {
                 console.log(`Document created successfully with ID: ${data.documentId}`);
                 setTitle("");
-                setContent("");
+                setFile(null);
                 setDocDate("");
+                onDocumentAdded();
             } else {
                 setError("Failed to create document");
             }
@@ -38,7 +40,7 @@ const AddDocument = () => {
     return (
         <div className="addDocumentContainer">
             <h2> Add a New Document: </h2>
-            {loading && <p>Loading documents...</p>}
+            {loading && <p>Adding Document...</p>}
             {error && <p className="error">{error}</p>}
             <input
                 type="text"
@@ -46,11 +48,10 @@ const AddDocument = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
             />
-            <textarea
-                placeholder="Content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={8}
+            <input
+                type="file"
+                accept=".txt,.pdf,.docx,.md"
+                onChange={(e) => setFile(e.target.files[0])}
             />
             <input
                 type="date"
@@ -59,7 +60,7 @@ const AddDocument = () => {
                 onChange={(e) => setDocDate(e.target.value)}
             />
             <button onClick={async () => {
-                if (title.trim() === "" || content.trim() === "") {
+                if (title.trim() === "" || !file) {
                     setError("Title and content are required. Please fill in all required fields.");
                     return;
                 }

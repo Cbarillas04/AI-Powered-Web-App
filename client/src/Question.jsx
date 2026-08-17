@@ -1,11 +1,29 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./Question.css";
 
 const Question = () => {
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
+    const [displayedAnswer, setDisplayedAnswer] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (!answer) return;
+
+        setDisplayedAnswer("");
+        let i = 0;
+
+        const interval = setInterval(() => {
+            setDisplayedAnswer((prev) => prev + answer[i]);
+            i++;
+            if (i >= answer.length) {
+                clearInterval(interval);
+            }
+        }, 20); // mm per character
+
+        return () => clearInterval(interval);
+    }, [answer]);
 
     async function handleQuestion() {
         try {
@@ -34,12 +52,12 @@ const Question = () => {
 
     return (
         <div className="questionContainer">
-            <h2> Ask a Question: </h2>
-            <input 
-                type="text" 
-                placeholder="Type your question here..." 
+            <h3 className="header"> Ask a Question: </h3>
+            <textarea
+                placeholder="Type your question here..."
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
+                rows={3}
             />
             <button
                 onClick={async () => {
@@ -52,10 +70,12 @@ const Question = () => {
                     setQuestion("");
                 }}
             >
-                {loading ? "Loading..." : "Ask"}
+                {loading ? "Loading..." : "Sumbit"}
             </button>
             {error && <p className="error">{error}</p>}
-            {answer && <p>Answer: {answer}</p>}
+            <div className="answerContainer">
+                {answer && <p>{displayedAnswer}</p>}
+            </div>
         </div>
     )
 }
